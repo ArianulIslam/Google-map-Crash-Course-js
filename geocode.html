@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Geo Map</title>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <style>
+    
+    </style>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+   
+  </head>
+  <body>
+      <div class="container">
+          <h2 id ="text-center">Enter Location : </h2>
+          <form id="location-form">
+              <input type="text" id="location-input" class="form-control form-control-lg"/>
+              <br>
+              <button type="submit" class="btn btn-primary btn-block">Submit</button>
+          </form>
+    <div class="card-block" id="formatted-address"></div>
+    <div  class="card-block" id="address-components"></div>
+    <div  class="card-block" id="geomatry"></div>
+    
+    </div>
+    <script>
+    
+    //call geo code
+   // geocode();
+   //get Location Form
+   
+   var locationForm = document.getElementById('location-form');
+   
+   //Listen for location
+   
+   locationForm.addEventListener('submit',geocode);
+   
+   
+   
+   
+   
+   
+   
+   
+    function geocode(e){
+        //prevent actual submit
+        e.preventDefault();
+        var location= document.getElementById('location-input').value;
+        axios.get('https://maps.googleapis.com/maps/api/geocode/json?',{
+           params:{
+               address: location,
+               key : 'AIzaSyCD8nFTdvFh4JlrOP5I6WvVZJyZoop8INU'
+           } 
+        })
+        .then(function(response){
+            
+            //log for response
+            console.log(response);
+            
+            //formated Address
+       var formattedAddress = response.data.results[0].formatted_address;
+            var formateedAddressOutput =`
+              <ul class="list-group">
+              <li class="list-group-item">${formattedAddress} </li>
+              </ul>
+            
+            `;
+            
+            //Address Compoonenets
+            var AddressComponents = response.data.results[0].address_components;
+            var AddressComponentsOutput = '<ul class="list-group">';
+            for (var i = 0 ; i<AddressComponents.length;i++){
+               AddressComponentsOutput+= `
+               <li class="list-group-item"><strong>${AddressComponents[i].types[0]}</strong> : ${AddressComponents[i].long_name}</li>
+               
+               `;
+            }
+            AddressComponentsOutput+='</ul>'
+            
+            
+            // Geometry location 
+             var geometrylat = response.data.results[0].geometry.location.lat;
+             var geometrylng = response.data.results[0].geometry.location.lng;
+             
+            var geometryOutput =`
+              <ul class="list-group">
+              <li class="list-group-item"><strong>Latitude : ${geometrylat}</strong </li>
+              <li class="list-group-item"><strong>Latitude : ${geometrylng}</strong </li>
+              
+              </ul>
+            
+            `;
+            
+            
+            
+            
+            //output to app 
+            document.getElementById('formatted-address').innerHTML = formateedAddressOutput;
+            document.getElementById('address-components').innerHTML = AddressComponentsOutput;
+            document.getElementById('geomatry').innerHTML = geometryOutput;
+            
+        }).catch(function(error){
+            console.log(error);
+        });
+    }
+    
+    
+    </script>
+    <!--<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBkZ1EImOc4zT5T7Fmnf_t-EAmFXwN8LUM&callback=initMap" async defer></script>-->
+     
+  </body>
+</html> 
