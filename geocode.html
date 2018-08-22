@@ -6,7 +6,10 @@
     <meta charset="utf-8">
      <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <style>
-    
+    #map-canvas{
+        width:100%;
+        height:500px;
+    }
     </style>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -17,10 +20,13 @@
       <div class="container">
           <h2 id ="text-center">Enter Location : </h2>
           <form id="location-form">
-              <input type="text" id="location-input" class="form-control form-control-lg"/>
+              <input type="text" id="location-input" placeholder="Where You want to go" class="form-control form-control-lg"/>
               <br>
               <button type="submit" class="btn btn-primary btn-block">Submit</button>
           </form>
+          <br>
+          <div class="card-block" id="map-canvas"></div>
+           <br>
     <div class="card-block" id="formatted-address"></div>
     <div  class="card-block" id="address-components"></div>
     <div  class="card-block" id="geomatry"></div>
@@ -37,14 +43,6 @@
    //Listen for location
    
    locationForm.addEventListener('submit',geocode);
-   
-   
-   
-   
-   
-   
-   
-   
     function geocode(e){
         //prevent actual submit
         e.preventDefault();
@@ -93,14 +91,50 @@
               </ul>
             
             `;
+            //Map & place search
+            var map = new google.maps.Map(document.getElementById('map-canvas'),{
+                center:{
+                    lat:geometrylat,
+                    lng:geometrylng
+                },
+                zoom:15
+                
+            });
             
+            var marke = new google.maps.Marker({
+                position:{
+                    lat:geometrylat,
+                    lng:geometrylng
+                },
+                map:map,
+                draggable:true
+                
+            });
             
-            
-            
-            //output to app 
+              //output to app 
             document.getElementById('formatted-address').innerHTML = formateedAddressOutput;
             document.getElementById('address-components').innerHTML = AddressComponentsOutput;
             document.getElementById('geomatry').innerHTML = geometryOutput;
+            
+            var searchBox = new google.maps.places.SearchBox(document.getElementById('location-input'));
+            //place change event on Search Box
+            google.maps.event.addEventListener(searchBox,'places_changed',function(){
+                var place =searchBox.getPlaces();
+                
+                var bounds = new google.maps.LatLngBounds();
+                var i,place;
+                for(i=0; place=place[i];i++){
+                    bounds.extend(place.geometry.location);
+                    marker.setPostion(place.geometry.location);
+                }
+                
+                map.fitBounds(bounds);
+                maps.setZoom(15);
+            });
+            
+            
+            
+          
             
         }).catch(function(error){
             console.log(error);
@@ -109,7 +143,7 @@
     
     
     </script>
-    <!--<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBkZ1EImOc4zT5T7Fmnf_t-EAmFXwN8LUM&callback=initMap" async defer></script>-->
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCD8nFTdvFh4JlrOP5I6WvVZJyZoop8INU&libraries=places"></script>
      
   </body>
 </html> 
