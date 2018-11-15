@@ -6,4 +6,13 @@ Google Map Api Crash Course using Javascript
 #Distance Matrix API
 #calcualte distance and arriaval time
 
-Demo : https://arianulislam.github.io/Google-map-api-js/.
+# Calculate the Distance Between two Addresses demo
+https://arianulislam.github.io/Google-map-api-js/.
+
+# GeoLocation
+https://arianulislam.github.io/Google-map-api-js/geocode
+
+#SETMARKER
+
+https://arianulislam.github.io/Google-map-api-js/marker
+
