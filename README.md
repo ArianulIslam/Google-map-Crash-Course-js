@@ -12,7 +12,7 @@ https://arianulislam.github.io/Google-map-api-js/.
 # GeoLocation
 https://arianulislam.github.io/Google-map-api-js/geocode
 
-#SETMARKER
+# SETMARKER
 
 https://arianulislam.github.io/Google-map-api-js/marker
 
